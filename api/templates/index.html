@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="HOLA description"
+      content="Frontend for Retail Store Object Detection."
+    />
+    <title>Retail Store Object Detection</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='web/fonts/stylesheet.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='web/styles/style.css') }}"
+    />
+  </head>
+
+  <body>
+    <header>
+      <a href="https://anyoneai.com/" target="_blank">
+        <img
+          src="{{url_for('static', filename='web/resources/logo_anyone.png')}}"
+          alt="Anyone AI Logo"
+          id="anyone-logo"
+        />
+      </a>
+    </header>
+
+    <hr style="margin-inline: -10px" />
+
+    <section>
+      <h1 id="title">Retail Store Object Detection</h1>
+
+      {% if not filename %}
+      <h3 id="instruction">
+        Hello {{ name }}! Please upload the shelf image to be detected by
+        clicking the button below
+      </h3>
+      {% endif %}
+
+
+      
+      {% if filename %}
+      <div class="img_container">
+        <img
+          src="{{ url_for('app_router.display_heatmap', filename=filename) }}"
+        />
+
+        
+
+
+        <img
+          src="{{ url_for('app_router.display_predict', filename=filename) }}" alt="BLABLABLA"
+        />
+      </div>
+        {% if context['mAP2'] %}
+        <div class="row">
+          <div class="col-25">
+            <label for="subject">
+              Mean Average Precision: {{ context['mAP'] }} </label
+            ><br />
+          </div>
+        </div>
+        <form id="form" method="POST" action="/feedback">
+          <button type="submit">Report incorrect answer</button>
+          <input
+            name="report"
+            style="visibility: hidden"
+            value="{'filename': '{{ filename }}', 'mAP': '{{ context['prediction'] }}' }"
+          />
+        </form>
+        {% endif %}
+
+        <p class="text-3xl mt-4"><a href="{{ url_for('app_router.new_upload') }}">Upload</a> a new image</p>
+    
+      {% endif %}
+    </section>
+
+    <form method="post" action="/" enctype="multipart/form-data">
+      <div id="upload-section">
+        <input
+          type="file"
+          name="file"
+          autocomplete="off"
+          required
+          class="select-file"
+        />
+      </div>
+      <div id="upload-section">
+        <input id="upload-button" type="submit" value="Upload" class="button" />
+      </div>
+    </form>
+
+    <div id="messages-section">
+      {% with messages = get_flashed_messages() %} {% if messages %} {% for
+      message in messages %}
+
+      <div>
+        <p class="message">{{ message }}</p>
+      </div>
+
+      {% endfor %} {% endif %} {% endwith %}
+    </div>
+
+    <script src="{{ url_for('static', filename='web/js/app.js') }}"></script>
+
+    <noscript>You need to enable JavaScript to view the full site.</noscript>
+  </body>
+</html>

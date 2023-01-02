@@ -1,0 +1,15 @@
+# Project files
+data
+mytest.py
+yolov5
+uploads/
+predictions/
+uploads_predictions/
+
+# Models
+*.pt
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
